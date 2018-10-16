@@ -35,8 +35,8 @@ class ClassificationCNN(nn.Module):
 
         # Fully Connected Layers
         self.fc1 = nn.Linear(num_filters * height_fc1 * width_fc1, hidden_dim)
-        self.fc2 = nn.Linear(hidden_dim, num_classes)
-
+        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc3 = nn.linear(hidden_dim,num_classes)
         # Other Layers
         self.dropout = nn.Dropout(p=dropout)
         self.maxpool = nn.MaxPool2d(pool, stride=stride_pool)
@@ -71,6 +71,8 @@ class ClassificationCNN(nn.Module):
         x = F.relu(x)
         #7 Fully Connected Layer
         x = self.fc2(x)
+        #3rd fully connected layer
+        x=self.fc3(F.relu(self.dropout(x)))
     
         ########################################################################
         #                             END OF YOUR CODE                         #
