@@ -4,6 +4,7 @@ import os
 import torch
 import torch.utils.data as data
 
+
 #class to import the X,Y into main process
 class CIFAR10Data(data.Dataset):
 
@@ -20,6 +21,11 @@ class CIFAR10Data(data.Dataset):
 
     def __len__(self):
         return len(self.y)
+
+def rel_error(x, y):
+    """ Returns relative error """
+    assert x.shape == y.shape, "tensors do not have the same shape. %s != %s" % (x.shape, y.shape)
+    return np.max(np.abs(x - y) / (np.maximum(1e-8, np.abs(x) + np.abs(y))))    
 
 def load_CIFAR_batch(filename):
     """ load single batch of cifar """

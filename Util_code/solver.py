@@ -50,31 +50,12 @@ class Solver(object):
         model.to(device)
 
         print('START TRAIN.')
-        ########################################################################
-        # TODO:                                                                #
-        # Write your own personal training method for our solver. In each      #
-        # epoch iter_per_epoch shuffled training batches are processed. The    #
-        # loss for each batch is stored in self.train_loss_history. Every      #
-        # log_nth iteration the loss is logged. After one epoch the training   #
-        # accuracy of the last mini batch is logged and stored in              #
-        # self.train_acc_history. We validate at the end of each epoch, log    #
-        # the result and store the accuracy of the entire validation set in    #
-        # self.val_acc_history.                                                #
-        #                                                                      #
-        # Your logging could like something like:                              #
-        #   ...                                                                #
-        #   [Iteration 700/4800] TRAIN loss: 1.452                             #
-        #   [Iteration 800/4800] TRAIN loss: 1.409                             #
-        #   [Iteration 900/4800] TRAIN loss: 1.374                             #
-        #   [Epoch 1/5] TRAIN acc/loss: 0.560/1.374                            #
-        #   [Epoch 1/5] VAL   acc/loss: 0.539/1.310                            #
-        #   ...                                                                #
-        ########################################################################
-        
         # Epochs
         for epoch in range(num_epochs):
             # Iterations
             iteration = 0
+            
+            #trainging the model and running 1 epoch
             for imgs, lbls in train_loader:
                 iteration += 1
 
@@ -85,16 +66,15 @@ class Solver(object):
                 # Forward pass
                 optim.zero_grad()               # zero the gradient buffers
                 output = model(images)          # forward pass
-
                 # Computation of loss and accuracy
                 loss = self.loss_func(output, labels)
-
                 # Backward pass
                 loss.backward()
-
                 # Optimization
                 optim.step()
 
+                
+                
                 # Log outcome every log_nth iteration
                 if (iteration+1) % log_nth == 0:
 
@@ -110,9 +90,11 @@ class Solver(object):
                 correct = (predicted == labels).data.cpu().numpy()
                 #num_correct = (predicted.int() == lbls.int()).sum()
                 acc_train = np.mean(correct)
+                self.train_acc_history.append(acc_train)
 
-            self.train_acc_history.append(acc_train)
-
+            
+            
+            
             # validate model
             num_labels = 0
             num_correct = 0
